@@ -1,15 +1,18 @@
 import swagger from "@elysiajs/swagger";
 
 export const swaggerMiddleware = () => {
+    const PORT = Bun.env.PORT;
+    const HOST = Bun.env.HOST || "localhost";
+
     return swagger({
         path: "/api/docs",
         documentation: {
             info: {
-                title: "Bio Link API",
+                title: "Sendi Studio - Message Relay API",
                 version: "1.0.0",
-                description: "Auto-generated Swagger documentation using Elysia",
+                description: "API documentation for Sendi Studio - Message Relay",
             },
-            servers: [{ url: "http://localhost:8001" }],
+            servers: [{ url: Bun.env.MODE === "development" ? `http://${HOST}:${PORT}` : `https://${HOST}` }],
         },
     });
 };
