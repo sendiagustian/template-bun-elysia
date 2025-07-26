@@ -11,7 +11,10 @@ const app = new Elysia()
     .use(swaggerMiddleware())
     .onBeforeHandle((context) => loggerBeforeMiddleware(context))
     .onAfterResponse((context) => loggerAfterMiddleware(context))
-    .onError(({ code, set }) => errorMiddleware(code, set))
+    .onError((context) => {
+        logger.error(`Error occurred: ${context.error}`);
+        errorMiddleware(context.code, context.set);
+    })
     .group("/api/v1", (app) => {
         app.group("health-check", (group) => group.use(healthRouter));
 
