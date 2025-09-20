@@ -1,6 +1,6 @@
 import jwt from "@elysiajs/jwt";
 import type { Elysia } from "elysia";
-import { WebResponse } from "../../data/responses/web_response";
+import { ErrorResponse } from "../../data/responses/error_response";
 
 export const jwtSetup = jwt({ name: "jwt", secret: Bun.env.JWT_SECRET! });
 
@@ -10,10 +10,14 @@ export const jwtAuthMiddleware = (app: Elysia) =>
 
         if (!token) {
             set.status = 401;
-            const response: WebResponse<null> = {
-                status: "ERROR",
-                message: "Missing Authorization header",
+            const response: ErrorResponse = {
+                success: false,
+                error: {
+                    code: "INVALID_TOKEN",
+                    message: "Token is required",
+                },
             };
+
             return response;
         }
 
@@ -21,9 +25,12 @@ export const jwtAuthMiddleware = (app: Elysia) =>
 
         if (!payload) {
             set.status = 401;
-            const response: WebResponse<null> = {
-                status: "ERROR",
-                message: "Invalid or expired token",
+            const response: ErrorResponse = {
+                success: false,
+                error: {
+                    code: "INVALID_TOKEN",
+                    message: "Invalid token",
+                },
             };
             return response;
         }
@@ -32,10 +39,14 @@ export const jwtAuthMiddleware = (app: Elysia) =>
 
         if (isExpired) {
             set.status = 401;
-            const response: WebResponse<null> = {
-                status: "ERROR",
-                message: "Token is expired",
+            const response: ErrorResponse = {
+                success: false,
+                error: {
+                    code: "INVALID_TOKEN",
+                    message: "Token is expired",
+                },
             };
+
             return response;
         }
 

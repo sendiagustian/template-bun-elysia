@@ -6,8 +6,8 @@ let db: SQL | null = null;
 export function getDatabase(): SQL {
     if (db) return db;
 
-    const host = decode(process.env.DB_HOST!);
-    const port = decode(process.env.DB_PORT!);
+    const host = process.env.DB_HOST!;
+    const port = process.env.DB_PORT!;
     const user = decode(process.env.DB_USER!);
     const pass = decode(process.env.DB_PASS!);
     const name = process.env.DB_NAME!;

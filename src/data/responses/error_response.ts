@@ -1,6 +1,10 @@
-import { ElysiaErrorSchema } from "../../core/schema/elysia_context";
+import { ElysiaErrorCodeSchema } from "../../core/schema/elysia_context";
 
 export type ErrorResponse = {
-    status: number | "ERROR";
-    details?: string | ElysiaErrorSchema;
+    success: boolean;
+    error: {
+        code: ElysiaErrorCodeSchema;
+        message: string;
+        details?: string;
+    }
 };

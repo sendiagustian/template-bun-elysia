@@ -9,10 +9,21 @@ import { healthRouter } from "./routers/health_route";
 const app = new Elysia()
     .use(cors())
     .use(swaggerMiddleware())
+    // .use(staticPlugin({ assets: "uploads", prefix: "/uploads" }))
+    .get("/favicon.ico", () => new Response(null, { status: 204 }))
     .onBeforeHandle((context) => loggerBeforeMiddleware(context))
     .onAfterResponse((context) => loggerAfterMiddleware(context))
     .onError((context) => {
-        logger.error(`Error occurred: ${context.error}`);
+        // Skip logging for common browser/dev tool requests
+        const ignorePaths = ["/.well-known/", "/favicon.ico", "/robots.txt", "/sitemap.xml"];
+
+        const shouldIgnore = ignorePaths.some((path) => context.path?.startsWith(path));
+
+        if (!shouldIgnore) {
+            logger.error(`Error occurred: ${context.error}`);
+            logger.error(context);
+        }
+
         errorMiddleware(context.code, context.set);
     })
     .group("/api/v1", (app) => {
@@ -29,5 +40,5 @@ const app = new Elysia()
 const PORT = parseInt(process.env.PORT || "8001", 10);
 
 app.listen(PORT, () => {
-    logger.info(`🚀 Server running at http://localhost:${PORT}/api/docs`);
+    logger.info(`🚀 Server running at http://localhost:${PORT}/docs`);
 });

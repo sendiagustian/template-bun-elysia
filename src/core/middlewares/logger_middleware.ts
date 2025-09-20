@@ -8,6 +8,21 @@ export interface CustomStore {
 export const loggerBeforeMiddleware = (context: Context) => {
     const customStore = context.store as { startTime: number };
     customStore.startTime = performance.now();
+
+    //     console.log(`[INCOMING REQUEST] ${new Date().toISOString()}`);
+    //     console.log(`>> Path: ${context.path}`);
+    //     console.log(`>> Method: ${context.request.method}`);
+
+    //     // Cetak semua headers
+    //     const headers: { [key: string]: string } = {};
+    //     for (const [key, value] of context.request.headers.entries()) {
+    //         headers[key] = value;
+    //     }
+    //     console.log(">> Headers:", JSON.stringify(headers, null, 2));
+
+    //     // Cetak body yang sudah diparsing oleh Elysia
+    //     console.log(">> Parsed Body:", context.body);
+    //     console.log("----------------------------------------------------");
 };
 
 export const loggerAfterMiddleware = (context: Context) => {

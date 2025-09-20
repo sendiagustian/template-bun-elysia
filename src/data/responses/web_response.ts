@@ -1,5 +1,12 @@
+export interface PaginationModel {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+}
+
 export type WebResponse<T> = {
-    status: number | "SUCCESS" | "FAILED" | "ERROR";
+    success: boolean;
     data?: T;
-    message?: string;
+    pagination?: PaginationModel;
 };

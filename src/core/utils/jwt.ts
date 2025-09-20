@@ -1,4 +1,5 @@
 import { ElysiaAuthSchema, ElysiaJWTSchema } from "../schema/elysia_context";
+import { jwtDecode } from "jwt-decode";
 
 interface PayloadGenerateToken {
     user: string;
@@ -22,7 +23,7 @@ export const jwtGenerateToken = async (
 
     const expires = tokenExpires ? Math.floor(tokenExpires.getTime() / 1000) : undefined;
 
-    const tokenJWT = await jwt.sign(expires ? { name: payload.user, expires } : { name: payload.user });
+    const tokenJWT = await jwt.sign(expires ? { username: payload.user, expires } : { name: payload.user });
 
     auth.set({
         value: tokenJWT,
@@ -34,4 +35,15 @@ export const jwtGenerateToken = async (
         token: tokenJWT,
         expired_at: expires ? expires : null,
     };
+};
+
+export const getUsernameFromToken = (token: string): string => {
+    if (!token) throw new Error("Token is required");
+
+    try {
+        const decoded: any = jwtDecode(token);
+        return decoded.username || decoded.name;
+    } catch (error) {
+        throw new Error("Invalid token");
+    }
 };

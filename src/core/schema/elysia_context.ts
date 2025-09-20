@@ -27,13 +27,19 @@ export type ElysiaJWTSchema = {
 
 export type ElysiaErrorCodeSchema =
     | number
+    | "DB_ERROR"
+    | "UNAUTHORIZED"
+    | "INVALID_TOKEN"
     | "UNKNOWN"
     | "VALIDATION"
     | "NOT_FOUND"
     | "PARSE"
     | "INTERNAL_SERVER_ERROR"
     | "INVALID_COOKIE_SIGNATURE"
-    | "INVALID_FILE_TYPE";
+    | "INVALID_CREDENTIALS"
+    | "INVALID_FILE_TYPE"
+    | "INVALID_REQUEST"
+    | "USER_CREATION_FAILED";
 
 export type ElysiaErrorSchema =
     | Readonly<Error>
