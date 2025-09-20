@@ -5,11 +5,13 @@ import { loggerAfterMiddleware, loggerBeforeMiddleware } from "./core/middleware
 import { errorMiddleware } from "./core/middlewares/error_middleware";
 import { logger } from "./core/utils/logging";
 import { healthRouter } from "./routers/health_route";
+import { uploadRouter } from "./routers/upload_router";
+import staticPlugin from "@elysiajs/static";
 
 const app = new Elysia()
     .use(cors())
     .use(swaggerMiddleware())
-    // .use(staticPlugin({ assets: "uploads", prefix: "/uploads" }))
+    .use(staticPlugin({ assets: "uploads", prefix: "/uploads" }))
     .get("/favicon.ico", () => new Response(null, { status: 204 }))
     .onBeforeHandle((context) => loggerBeforeMiddleware(context))
     .onAfterResponse((context) => loggerAfterMiddleware(context))
@@ -28,6 +30,7 @@ const app = new Elysia()
     })
     .group("/api/v1", (app) => {
         app.group("health-check", (group) => group.use(healthRouter));
+        app.group("upload", (group) => group.use(uploadRouter));
 
         // SAMPLE AUTHENTICATION
         // app.group("auth", (group) => group.use(authRouter));
